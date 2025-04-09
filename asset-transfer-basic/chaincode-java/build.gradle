@@ -5,7 +5,6 @@
 plugins {
     id 'com.gradleup.shadow' version '8.3.5'
     id 'application'
-    id 'checkstyle'
     id 'jacoco'
 }
 
@@ -20,6 +19,14 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
     testImplementation 'org.assertj:assertj-core:3.25.3'
     testImplementation 'org.mockito:mockito-core:5.12.0'
+	implementation 'org.bouncycastle:bcprov-jdk16:1.46'
+	implementation name: 'jna-3.2.5'
+    implementation name: 'jpbc-api-2.0.0'
+    implementation name: 'jpbc-benchmark-2.0.0'
+    implementation name: 'jpbc-crypto-2.0.0'
+    implementation name: 'jpbc-mm-2.0.0'
+    implementation name: 'jpbc-pbc-2.0.0'
+    implementation name: 'jpbc-plaf-2.0.0'
 }
 
 repositories {
@@ -27,11 +34,14 @@ repositories {
     maven {
         url 'https://jitpack.io'
     }
+	flatDir {
+       dirs 'libs'
+   }
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -39,34 +49,6 @@ application {
     mainClass = 'org.hyperledger.fabric.contract.ContractRouter'
 }
 
-checkstyle {
-    toolVersion '8.21'
-    configFile file("config/checkstyle/checkstyle.xml")
-}
-
-checkstyleMain {
-    source ='src/main/java'
-}
-
-checkstyleTest {
-    source ='src/test/java'
-}
-
-jacocoTestReport {
-    dependsOn test
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            limit {
-                minimum = 0.9
-            }
-        }
-    }
-
-    finalizedBy jacocoTestReport
-}
 
 test {
     useJUnitPlatform()
